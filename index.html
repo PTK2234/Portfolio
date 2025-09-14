@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Project</title>
+    <!-- Connect favicon and custom stylesheet from asset folder -->
+    <link rel="icon" type="image/png" href="asset/favicon.png">
+    <link rel="stylesheet" href="asset/custom.css">
+    <!-- Font Awesome CDN for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f9fafb;
+            --accent: #38bdf8;
+            --accent2: #f97316;
+            --border: #334155;
+            --shadow: rgba(56,189,248,0.10);
+            --button-border: 2px solid var(--accent);
+            --avatar-frame-border: 3px solid var(--accent2);
+        }
+        [data-theme="light"] {
+            --bg-main: #f9fafb;
+            --bg-card: #fff;
+            --text-main: #1e293b;
+            --accent: #0ea5e9;
+            --accent2: #ea580c;
+            --border: #cbd5e1;
+            --shadow: rgba(56,189,248,0.06);
+        }
+        body {
+            background: var(--bg-main);
+            color: var(--text-main);
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            min-height: 100vh;
+        }
+        nav {
+            width: 100%;
+            background: var(--bg-card);
+            box-shadow: 0 2px 8px rgba(56,189,248,0.08);
+            padding: 0 0 0 0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        nav ul {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 32px; /* Add more space between nav items */
+        }
+        nav li {
+            margin: 0 24px; /* Increase horizontal space */
+        }
+        nav a {
+            color: var(--accent);
+            font-weight: 500;
+            font-size: 17px;
+            padding: 18px 12px; /* Add horizontal padding */
+            display: block;
+            transition: color 0.2s;
+        }
+        nav a:hover {
+            color: var(--accent2);
+        }
+        #root {
+            max-width: 900px;
+            margin: 40px auto;
+            background: var(--bg-card);
+            border-radius: 18px;
+            box-shadow: 0 8px 32px var(--shadow);
+            padding: 56px 48px; /* More space inside main card */
+            animation: fadeIn 1.2s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h1, h2, h3 {
+            color: var(--accent);
+            margin-top: 0;
+            margin-bottom: 18px;
+        }
+        h1 {
+            font-size: 2.6rem;
+            letter-spacing: 1px;
+        }
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 24px;
+        }
+        h3 {
+            font-size: 1.2rem;
+        }
+        a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        a:hover {
+            text-decoration: underline;
+            color: var(--accent2);
+        }
+        .section {
+            margin-bottom: 64px; /* More space between sections */
+            padding-bottom: 36px; /* More space at bottom of section */
+            border-bottom: 1px solid var(--border);
+            transition: box-shadow 0.3s;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.7s cubic-bezier(.4,0,.2,1), transform 0.7s cubic-bezier(.4,0,.2,1);
+        }
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .section.out {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.4s, transform 0.4s;
+        }
+        .section:last-child {
+            border-bottom: none;
+        }
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 22px; /* More space between skill items */
+            list-style: none;
+            padding: 0;
+            margin-top: 18px;
+            margin-bottom: 18px;
+        }
+        .skills-list li {
+            background: linear-gradient(90deg, var(--border) 60%, var(--bg-card) 100%);
+            color: var(--accent);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(56,189,248,0.06);
+            transition: background 0.2s, color 0.2s;
+            margin-bottom: 8px;
+        }
+        .skills-list li:hover {
+            background: var(--accent);
+            color: var(--bg-card);
+        }
+        #projects > div {
+            background: var(--bg-main);
+            border-radius: 14px;
+            box-shadow: 0 2px 12px rgba(56,189,248,0.07);
+            padding: 20px 24px;
+            margin-bottom: 24px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        #projects > div:hover {
+            box-shadow: 0 8px 32px rgba(249,115,22,0.13);
+        }
+        #projects img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin: 12px 0;
+            background: var(--bg-main);
+        }
+        button, .btn {
+            background: linear-gradient(90deg, var(--accent) 60%, var(--accent2) 100%);
+            color: #fff;
+            border: var(--button-border);
+            border-radius: 22px;
+            padding: 10px 28px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(56,189,248,0.08), 0 0 0 2px var(--accent) inset;
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+        button:hover, .btn:hover {
+            background: var(--accent2);
+            box-shadow: 0 4px 16px rgba(56,189,248,0.13), 0 0 0 2px var(--accent2) inset;
+        }
+        form {
+            margin-top: 18px;
+        }
+        textarea {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--bg-main);
+            color: var(--text-main);
+            padding: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            transition: border 0.2s;
+        }
+        textarea:focus {
+            border: 1.5px solid var(--accent);
+            outline: none;
+        }
+        label {
+            font-weight: 500;
+            color: var(--accent);
+        }
+        ul {
+            padding-left: 18px;
+        }
+        #avatar-img {
+            border: 4px solid var(--accent);
+            box-shadow: 0 0 0 4px var(--bg-card), 0 4px 24px rgba(56,189,248,0.18);
+        }
+        #avatar-container::before {
+            border: var(--avatar-frame-border);
+            box-shadow: 0 0 0 4px var(--accent2), 0 0 24px 4px var(--accent)55, 0 0 0 8px var(--bg-card);
+        }
+        @media (max-width: 600px) {
+            #root {
+                padding: 28px 8px;
+            }
+            nav ul {
+                flex-direction: column;
+                gap: 12px;
+            }
+            nav li {
+                margin: 8px 0;
+            }
+            .section {
+                margin-bottom: 36px;
+                padding-bottom: 18px;
+            }
+        }
+    </style>
+    <style>
+        .link-preview-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 700px;
+            height: 500px;
+            background: #1e293b;
+            border: 2px solid #38bdf8;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(56,189,248,0.18);
+            z-index: 9999;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .link-preview-popup iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #0f172a;
+        }
+        @media (max-width: 600px) {
+            .link-preview-popup {
+                width: 98vw;
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="#about"><i class="fa-solid fa-user"></i> About</a></li>
+            <li><a href="#experience"><i class="fa-solid fa-graduation-cap"></i> Experience</a></li>
+            <li><a href="#skills"><i class="fa-solid fa-lightbulb"></i> Skills</a></li>
+            <li><a href="#cv"><i class="fa-solid fa-file-lines"></i> Document</a></li>
+            <li><a href="#contact"><i class="fa-solid fa-envelope"></i> Contact</a></li>
+        </ul>
+        <button id="theme-toggle" aria-label="Toggle light/dark mode" style="position:absolute;top:10px;right:24px;background:none;border:none;cursor:pointer;font-size:1.4rem;color:var(--accent);">
+            <i class="fa-solid fa-moon" id="theme-toggle-icon"></i>
+        </button>
+    </nav>
+    <div id="root">
+        <section class="section" id="about">
+            <div class="avatar-container" id="avatar-container">
+                <img src="asset/avatar.png" alt="Avatar" class="avatar-img" id="avatar-img"
+                     onerror="this.style.display='none';this.insertAdjacentHTML('afterend', `<span class='avatar-fallback' id='avatar-fallback'><svg width='140' height='140' viewBox='0 0 140 140' fill='none' xmlns='http://www.w3.org/2000/svg'><circle cx='70' cy='70' r='68' fill='#1e293b' stroke='#38bdf8' stroke-width='4'/><circle cx='70' cy='62' r='32' fill='#38bdf8'/><ellipse cx='70' cy='112' rx='40' ry='18' fill='#38bdf8' opacity='0.7'/></svg></span>`);">
+            </div>
+            <div class="about-content" id="about-content">
+                <h1 id="profile-name">Pham Trọng Khang</h1>
+                <p id="profile-summary">A proactive and adaptable individual with a strong interest in both sales and web development. Skilled in communication, teamwork, and customer service, while also gaining hands-on experience in front-end development and web technologies. Eager to apply both business and technical skills in a dynamic environment, and committed to continuous learning and professional growth.</p>
+            </div>
+        </section>
+        <section class="section" id="experience">
+            <h2 id="experience-title">Experience & Education</h2>
+            <ul id="experience-list">
+                <li><strong>INTERNATIONAL SCHOOL, VIETNAM NATIONAL UNIVERSITY</strong> (2020 - 2025)<br>Bachelor degree, Management<br>Study language: English</li>
+                <li><strong>KEUKA COLLEGE</strong> (2020 - 2025)<br>Bachelor degree, Science in Management<br>Year 2 transfer student (6 months)</li>
+                <li><strong>Sales Internship</strong> – HT&CM Co., Ltd (2023 - 2024)<br>
+                    <ul>
+                        <li>Coordinate with other departments (marketing, customer care) to implement sales campaigns.</li>
+                        <li>Support order processing and tracking delivery progress.</li>
+                        <li>Support the sales team in finding and contacting potential customers.</li>
+                        <li>Participate in the process of consulting products, introducing services to customers via phone and email.</li>
+                    </ul>
+                </li>
+                <li><strong>Freelance Web Developer</strong> (2022 - 2025)<br>
+                    <ul>
+                        <li>Developed and deployed web applications, from requirements determination to development.</li>
+                        <li>Using HTML, CSS, JavaScript, and Figma to develop visually appealing user interfaces and robust functionality for websites.</li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+        <section class="section" id="skills">
+            <h2 id="skills-title">Skills</h2>
+            <ul class="skills-list" id="skills-list">
+                <li>Communication</li>
+                <li>Teamwork</li>
+                <li>Presentation</li>
+                <li>Time Management</li>
+                <li>Customer Service</li>
+                <li>Office IT (Microsoft Office, Google Workspace)</li>
+                <li>Sales & Negotiation</li>
+                <li>HTML</li>
+                <li>CSS</li>
+                <li>JavaScript</li>
+                <li>Figma</li>
+                <li>Language: IELTS 6.0 (Reading 7.0)</li>
+            </ul>
+        </section>
+        <section class="section" id="cv">
+            <h2 id="cv-title"><i class="fa-solid fa-file-lines"></i> Document</h2>
+            <ul id="cv-list">
+                <li><a href="https://drive.google.com/file/d/10002xyR303jCKP_Xk9Yb8VdJXm89E-Rw/preview" target="_blank" class="cv-link"><i class="fa-solid fa-file-pdf"></i> VIE Profile</a></li>
+                <li><a href="https://drive.google.com/file/d/1JhHYhqiSCClP7UZCmlk1bsyyhYbcslR7/preview" target="_blank" class="cv-link"><i class="fa-solid fa-file-pdf"></i> ENG Profile</a></li>
+                <li><a href="https://drive.google.com/file/d/1dPWjqSKvU3LssuOHrt7qCw9aiepTVAEp/preview" target="_blank" class="cv-link"><i class="fa-solid fa-certificate"></i> Ielts Certificate</a></li>
+            </ul>
+        </section>
+        <section class="section" id="contact">
+            <h2 id="contact-title"><i class="fa-solid fa-address-book"></i> Contact</h2>
+            <ul id="contact-list">
+                <li><i class="fa-solid fa-phone"></i> Phone: <a href="tel:0364961271">0364961271</a></li>
+                <li><i class="fa-solid fa-envelope"></i> Email: <a href="mailto:khangphamtrong98@gmail.com">khangphamtrong98@gmail.com</a></li>
+                <li><i class="fa-solid fa-globe"></i> Portfolio: <a href="https://bit.ly/4beUfXI" target="_blank">https://bit.ly/4beUfXI</a></li>
+                <li><i class="fa-solid fa-location-dot"></i> Location: Hoang Mai, Hanoi</li>
+            </ul>
+        </section>
+    </div>
+    <div class="link-preview-popup" id="linkPreviewPopup">
+        <iframe id="linkPreviewIframe" sandbox="allow-same-origin allow-scripts"></iframe>
+    </div>
+    <script>
+    // Link preview popup logic (CV section only)
+    const popup = document.getElementById('linkPreviewPopup');
+    const iframe = document.getElementById('linkPreviewIframe');
+    let popupTimeout;
+
+    function showPreview(e, url) {
+        clearTimeout(popupTimeout);
+        iframe.src = url;
+        popup.style.display = 'block';
+        positionPopup(e);
+    }
+    function hidePreview() {
+        popupTimeout = setTimeout(() => {
+            popup.style.display = 'none';
+            iframe.src = '';
+        }, 120);
+    }
+    function positionPopup(e) {
+        let x = e.clientX + 20;
+        let y = e.clientY + 20;
+        const popupRect = popup.getBoundingClientRect();
+        if (x + popupRect.width > window.innerWidth) x = window.innerWidth - popupRect.width - 10;
+        if (y + popupRect.height > window.innerHeight) y = window.innerHeight - popupRect.height - 10;
+        popup.style.left = x + 'px';
+        popup.style.top = y + 'px';
+    }
+    // Only apply preview to links in the CV section
+    document.querySelectorAll('#cv-list a').forEach(link => {
+        if (link.href && link.target === '_blank') {
+            link.addEventListener('mouseenter', function(e) {
+                showPreview(e, link.href);
+            });
+            link.addEventListener('mouseleave', hidePreview);
+        }
+    });
+    popup.addEventListener('mouseenter', () => clearTimeout(popupTimeout));
+    popup.addEventListener('mouseleave', hidePreview);
+
+    // Scroll in/out animation for sections
+    const sectionIds = ['about', 'experience', 'skills', 'cv', 'contact'];
+    const sections = sectionIds.map(id => document.getElementById(id));
+    const observer = new window.IntersectionObserver(
+        (entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    entry.target.classList.remove('out');
+                } else {
+                    entry.target.classList.remove('visible');
+                    entry.target.classList.add('out');
+                }
+            });
+        },
+        {
+            threshold: 0.15
+        }
+    );
+    sections.forEach(section => {
+        if (section) observer.observe(section);
+    });
+
+    // Light/Dark mode toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-toggle-icon');
+    function setTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        themeIcon.className = theme === 'light' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+    }
+    // Initial theme: default to dark
+    const userTheme = localStorage.getItem('theme');
+    setTheme(userTheme ? userTheme : 'dark');
+    themeToggle.onclick = () => {
+        const current = document.documentElement.getAttribute('data-theme');
+        setTheme(current === 'dark' ? 'light' : 'dark');
+    };
+    </script>
+</body>
+</html>
